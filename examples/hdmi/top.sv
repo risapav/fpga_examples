@@ -17,7 +17,6 @@ module top
 // {ALTERA_ARGS_BEGIN} DO NOT REMOVE THIS LINE!
 
 	input  logic        clk,
-	input  logic        reset_n,     // reset.reset_n
 	output logic        sdram_clk,   // sdram_clk.clk
 	output logic [11:0] sdram_addr,  // sdram.addr
 	output logic [1:0]  sdram_ba,    // .ba
@@ -32,7 +31,7 @@ module top
 	
 	
 	// user interface
-	input	logic	[0:1]	button,
+	input	logic	[0:2]	button,
 
 	input logic P3_2,
 	input logic P3_3,
@@ -84,7 +83,7 @@ module top
 	
 	PushButton_Debouncer button_reset(
 		.clk,
-		.PB(reset_n),
+		.PB(button[0]),
 		.PB_state(reset)
 	);
 	

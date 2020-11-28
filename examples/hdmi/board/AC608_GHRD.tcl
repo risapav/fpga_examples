@@ -191,26 +191,3 @@ set_location_assignment PIN_R14 -to uart_tx
 set_location_assignment PIN_T13 -to uart_rx
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_tx
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_rx
-
-#settings
-set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-
-#files
-set_global_assignment -name SEARCH_PATH ../../fpga_lib/lib
-set_global_assignment -name SEARCH_PATH src
-
-set_global_assignment -name SDC_FILE board/AC608_GHRD.sdc
-set_global_assignment -name CDF_FILE board/chain.cdf
-
-set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/rgb/rgb.sv
-set_global_assignment -name VERILOG_FILE ../../fpga_lib/lib/divider.v
-set_global_assignment -name VERILOG_FILE ../../fpga_lib/lib/debouncer.v
-set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/hdmi/hdmi.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/sound/sawtoth.sv
-set_global_assignment -name QIP_FILE src/pll.qip
-set_global_assignment -name SYSTEMVERILOG_FILE src/app.sv
-set_global_assignment -name SYSTEMVERILOG_FILE top.sv
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
