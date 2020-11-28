@@ -2,11 +2,11 @@
 //store it in an array bit[7:0] img[3][640][480] ; 3 is for R,G,B values , 640 and 480 is to match the pixel size.
 
 module App (
-	input wire rst_in,
-	input wire logic clk_50, 
-	input wire logic clk_pixel, 
-	input wire logic clk_pixel_x10, 
-	input wire logic clk_audio,
+	input logic rst_in,
+	input logic clk_50, 
+	input logic clk_pixel, 
+	input logic clk_pixel_x10, 
+	input logic clk_audio,
 	// These outputs go to your HDMI port
 	// tdms[0..2] are chanels
 	// tdms[3] is clock
