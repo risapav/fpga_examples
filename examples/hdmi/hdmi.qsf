@@ -196,6 +196,7 @@ set_global_assignment -name TOP_LEVEL_ENTITY top
 
 
 
+set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/rgb/rgb.sv
 set_global_assignment -name VERILOG_FILE ../../fpga_lib/lib/divider.v
 set_global_assignment -name VERILOG_FILE ../../fpga_lib/lib/debouncer.v
 set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/hdmi/hdmi.sv
