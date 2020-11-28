@@ -48,12 +48,7 @@ module top
 	tmds_n,
 	// user interface
 	button,
-	led,
-	// spi interface
-	spi_miso, 
-	spi_mosi,
-	spi_clk,
-	spi_cs_n
+	led
 	
 // {ALTERA_ARGS_END} DO NOT REMOVE THIS LINE!
 
@@ -93,11 +88,6 @@ output	[0:3]	led;
 // hdmi interface
 output	[0:3]	tmds_p;
 output	[0:3]	tmds_n;
-// spi interface
-input		spi_miso; 
-output	spi_mosi;
-output	spi_clk;
-output	spi_cs_n;
 	
 // {ALTERA_IO_END} DO NOT REMOVE THIS LINE!
 // {ALTERA_MODULE_BEGIN} DO NOT REMOVE THIS LINE!
@@ -136,16 +126,6 @@ output	spi_cs_n;
 		);
 	//end of frequency generator
 
-	//test clock
-//	Test test(
-//		.CLK1(clk_pix), 
-//		.CLK2(clk_pix10), 
-//		.CLK3(clk_audio), 
-//		.LED1(led[0]),
-//		.LED2(led[1]),
-//		.LED3(led[2])
-//		);
-
 	Divider	#( 
 		.DIVISOR(25000000) 
 	) 
@@ -165,11 +145,6 @@ output	spi_cs_n;
 		// hdmi interface
 		.tmds_p, 
 		.tmds_n,
-		// spi interface
-		.spi_miso, 
-		.spi_clk,
-		.spi_mosi,
-		.spi_cs_n,
 		// user interface
 		.key, 
 		.led({led[1], led[2]})

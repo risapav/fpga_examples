@@ -194,13 +194,10 @@ module App (
 	input wire logic clk_pixel_x10, 
 	input wire logic clk_audio,
 	// These outputs go to your HDMI port
+	// tdms[0..2] are chanels
+	// tdms[3] is clock
 	output logic [0:3] tmds_p,
 	output logic [0:3] tmds_n,
-	// spi interface
-	input  wire logic spi_miso,
-	output wire logic spi_clk,
-	output wire logic spi_mosi,
-	output wire logic spi_cs_n,
 	// user interface
 	input  logic key,
 	output logic [0:3] led
@@ -283,57 +280,6 @@ module App (
 		.screen_start_x,
 		.screen_start_y
 	);	
-
-	//---------------------
-	// sdcard
-	//---------------------
-	wire       outreq;    // when outreq=1, a byte of file content is read out from outbyte
-	wire [7:0] outbyte;   // a byte of file content
-
-	wire [3:0] sdcardstate;
-	wire [1:0] sdcardtype;
-	wire [2:0] fatstate;
-	wire [1:0] filesystemtype;
-	wire       file_found;
-
-	//assign SD_RESET = 1'b0;
-	assign SD_RESET = rst_in;
-	
-	//led 3 zobrazi outreq
-	assign led[0] = outreq;
-	assign led[1] = file_found;
-
-	// For input and output definitions of this module, see sd_file_reader.sv
-	sd_file_reader #(
-		 .FILE_NAME      ( "01_640x480.png"  ), // file to read, ignore Upper and Lower Case
-														 // For example, if you want to read a file named HeLLo123.txt in the SD card,
-														 // the parameter here can be hello123.TXT, HELLO123.txt or HEllo123.Txt
-		 
-		 .SPI_CLK_DIV    ( 100            )  // SD spi_clk freq = clk freq/(2*SPI_CLK_DIV)
-														 // modify SPI_CLK_DIV to change the SPI speed
-														 // for example, when clk=100MHz, SPI_CLK_DIV=100,then spi_clk=100MHz/(2*100)=500kHz
-														 // 500kHz is a typical SPI speed for SDcard
-	) sd_file_reader_inst (
-		 .clk            ( clk_50      ),
-		 .rst_n          ( SD_RESET         ),  // rst_n active low, re-scan and re-read SDcard by reset
-		 
-		 // signals connect to SD bus
-		 .spi_miso,
-		 .spi_mosi,
-		 .spi_clk,
-		 .spi_cs_n,
-		 
-		 // display information on 12bit LED
-		 .sdcardstate,
-		 .sdcardtype,  // 0=Unknown, 1=SDv1.1 , 2=SDv2 , 3=SDHCv2
-		 .fatstate,  // 3'd6 = DONE
-		 .filesystemtype,  // 0=Unknown, 1=invalid, 2=FAT16, 3=FAT32
-		 .file_found,  // 0=file not found, 1=file found
-		 
-		 // file content output interface
-		 .outreq,
-		 .outbyte
-	);
 
 
 endmodule
