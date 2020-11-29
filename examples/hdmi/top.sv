@@ -61,7 +61,6 @@ module top
 //	input  uart_rx,
 	
 	// hdmi interface
-	// hdmi interface
 	output [0:3]	tmds_p,
 	output [0:3]	tmds_n
 	
@@ -121,19 +120,42 @@ module top
 	//end of test clock
 
 	//hdmi app
+	logic [3:0] o_tmds;
 	App app(
+		// sdram
+		.sdram_addr,  // sdram.addr
+		.sdram_ba,    // .ba
+		.sdram_cas_n, // .cas_n
+		.sdram_cke,   // .cke
+		.sdram_cs_n,  // .cs_n
+		.sdram_dq,    // .dq
+		.sdram_dqm,   // .dqm
+		.sdram_ras_n, // .ras_n
+		.sdram_we_n,
+		// pll
 		.rst_in(reset),
 		.clk_50(clk),
 		.clk_pixel, 
 		.clk_pixel_x10, 
 		.clk_audio,
 		// hdmi interface
-		.tmds_p, 
-		.tmds_n,
+		.o_tmds, 
 		// user interface
 		.key, 
 		.led({led[1], led[2]})
 		);
+		
+	//hdmi output 
+	// If Altera synthesis, a true differential buffer is built with altera_gpio_lite from the Intel IP Catalog.
+	// If simulation, a mocked signal inversion is used.
+	
+	altiobuf tdms(
+		.datain(o_tmds),
+		.dataout(tmds_p), 
+		.dataout_b(tmds_n)
+	);
+	
+	
 // {ALTERA_MODULE_END} DO NOT REMOVE THIS LINE!
 endmodule
 

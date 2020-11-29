@@ -7,11 +7,18 @@ module App (
 	input logic clk_pixel, 
 	input logic clk_pixel_x10, 
 	input logic clk_audio,
+	// sdram
+	output  [11:0] sdram_addr,  // sdram.addr
+	output  [1:0]  sdram_ba,    // .ba
+	output         sdram_cas_n, // .cas_n
+	output         sdram_cke,   // .cke
+	output         sdram_cs_n,  // .cs_n
+	inout   [15:0] sdram_dq,    // .dq
+	output  [1:0]  sdram_dqm,   // .dqm
+	output         sdram_ras_n, // .ras_n
+	output         sdram_we_n,
 	// These outputs go to your HDMI port
-	// tdms[0..2] are chanels
-	// tdms[3] is clock
-	output logic [0:3] tmds_p,
-	output logic [0:3] tmds_n,
+	output logic [3:0] o_tmds,
 	// user interface
 	input  logic key,
 	output logic [0:3] led
@@ -75,8 +82,9 @@ module App (
 		.audio_data, // vstup pre audio data
 
 		// These outputs go to your HDMI port
-		.tmds_p,
-		.tmds_n,
+//		.tmds_p,
+//		.tmds_n,
+		.o_tmds,
 
 		// All outputs below this line stay inside the FPGA
 		// They are used (by you) to pick the color each pixel should have
@@ -94,6 +102,47 @@ module App (
 		.screen_start_x,
 		.screen_start_y
 	);	
+	
+	// sdram
+	localparam DATA_WIDTH = 32;
+	localparam ADDR_WIDTH = 12;
+	logic [ADDR_WIDTH-1:0]addr;
+	logic	[DATA_WIDTH-1:0]data;
+	logic	we;
+	logic	req;
+	logic	ack;
+	logic	valid;
+	logic	[DATA_WIDTH-1:0]q;
+	
+	
+	sdram 
+	#(
+		.CLK_FREQ(50.000),
+		.ADDR_WIDTH(ADDR_WIDTH),
+		.DATA_WIDTH(DATA_WIDTH)
+	)
+	sdram(
+		.reset(rst_in),
+		.clk(clk_50),
+		
+		.addr(addr),
+		.data(data),
+		.we(we),
+		.req(req),
+		.ack(ack),
+		.valid(valid),
+		.q(q),
+	
+		.sdram_a(sdram_addr),
+		.sdram_ba(sdram_ba),
+		.sdram_dq(sdram_dq),
+		.sdram_cke(sdram_cke),
+		.sdram_cs_n(sdram_cs_n),
+		.sdram_ras_n(sdram_ras_n),
+		.sdram_cas_n(sdram_cas_n),
+		.sdram_we_n(sdram_we_n),
+		.sdram_dqm(sdram_dqm)
+	);
 
 
 endmodule

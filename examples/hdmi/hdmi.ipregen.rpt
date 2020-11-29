@@ -1,6 +1,6 @@
 IP Upgrade report for hdmi
-Sat Nov 28 22:05:33 2020
-Quartus Prime Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
+Sun Nov 29 15:24:20 2020
+Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 
 
 ---------------------
@@ -35,8 +35,8 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------+
 ; IP Upgrade Summary                                                         ;
 +------------------------------+---------------------------------------------+
-; IP Components Upgrade Status ; Failed - Sat Nov 28 22:05:33 2020           ;
-; Quartus Prime Version        ; 20.1.0 Build 711 06/05/2020 SJ Lite Edition ;
+; IP Components Upgrade Status ; Failed - Sun Nov 29 15:24:20 2020           ;
+; Quartus Prime Version        ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
 ; Revision Name                ; hdmi                                        ;
 ; Top-level Entity Name        ; top                                         ;
 ; Family                       ; Cyclone IV E                                ;
@@ -49,8 +49,8 @@ https://fpgasoftware.intel.com/eula.
 Info (23030): Evaluation of Tcl script c:/intelfpga_lite/20.1/quartus/common/tcl/internal/ip_regen/ip_regen.tcl was successful
 Info: Quartus Prime Shell was successful. 0 errors, 0 warnings
     Info: Peak virtual memory: 4851 megabytes
-    Info: Processing ended: Sat Nov 28 22:05:33 2020
-    Info: Elapsed time: 00:00:10
+    Info: Processing ended: Sun Nov 29 15:24:20 2020
+    Info: Elapsed time: 00:00:11
     Info: Total CPU time (on all processors): 00:00:27
 
 

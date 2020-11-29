@@ -41,7 +41,7 @@ set_global_assignment -name FAMILY "Cyclone IV E"
 set_global_assignment -name DEVICE EP4CE10F17C8
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "18:15:23  OCTOBER 22, 2020"
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
@@ -69,7 +69,7 @@ set_location_assignment PIN_J13 -to led[1]
 set_location_assignment PIN_G16 -to led[2]
 set_location_assignment PIN_B16 -to led[3]
 set_location_assignment PIN_F8 -to led[4]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to led[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[3]
@@ -90,14 +90,14 @@ set_location_assignment PIN_L2 -to tmds_p[0]
 set_location_assignment PIN_N2 -to tmds_p[1]
 set_location_assignment PIN_P2 -to tmds_p[2]
 set_location_assignment PIN_K2 -to tmds_p[3]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_n[0]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_n[1]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_n[2]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_n[3]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_p[0]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_p[1]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_p[2]
-set_instance_assignment -name IO_STANDARD LVDS -to tmds_p[3]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_n[0]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_n[1]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_n[2]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_n[3]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_p[0]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_p[1]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_p[2]
+set_instance_assignment -name IO_STANDARD "MINI-LVDS_E_3R" -to tmds_p[3]
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to tmds_p[0]
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to tmds_p[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to tmds_p[2]
@@ -244,8 +244,7 @@ set_global_assignment -name SEARCH_PATH ../../fpga_lib/lib
 set_global_assignment -name SEARCH_PATH src
 
 
-
-
+set_global_assignment -name VHDL_FILE ../../fpga_lib/lib/sdram/sdram.vhd
 set_global_assignment -name SDC_FILE board/AC608_GHRD.sdc
 set_global_assignment -name CDF_FILE board/chain.cdf
 set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/rgb/rgb.sv
