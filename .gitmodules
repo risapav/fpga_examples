@@ -1,6 +1,10 @@
 [submodule "fpga_lib"]
 	path = fpga_lib
 	url = https://github.com/risapav/fpga_lib
+	branch = main
 [submodule "fpga_board"]
 	path = fpga_board
 	url = https://github.com/risapav/fpga_board
+	branch = main
+[submodule "DbConnector"]
+	branch = stable
