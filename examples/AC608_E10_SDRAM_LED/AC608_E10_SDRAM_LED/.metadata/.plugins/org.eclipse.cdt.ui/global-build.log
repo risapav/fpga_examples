@@ -1,0 +1,26 @@
+
+**** Build of configuration Nios II for project mem_test ****
+
+make mem_init_generate 
+Info: Building ../mem_test_bsp/
+make --no-print-directory -C ../mem_test_bsp/
+[BSP build complete]
+Post-processing to create mem_init/mysystem_ram.hex...
+bash -c 'elf2hex mem_test.elf 0x00000000 0x00003fff --width=32 \
+		--little-endian-mem --create-lanes=0  mem_init/mysystem_ram.hex'
+Post-processing to create mem_init/hdl_sim/mysystem_ram.dat...
+bash -c 'elf2dat --infile=mem_test.elf --outfile=mem_init/hdl_sim/mysystem_ram.dat \
+		--base=0x00000000 --end=0x00003fff --width=32 \
+		--little-endian-mem --create-lanes=0 '
+Post-processing to create mem_init/hdl_sim/sdram.dat...
+bash -c 'elf2dat --infile=mem_test.elf --outfile=mem_init/hdl_sim/sdram.dat \
+		--base=0x01000000 --end=0x01ffffff --width=16 \
+		--little-endian-mem --create-lanes=0 '
+Post-processing to create mem_init/hdl_sim/mysystem_ram.sym...
+nios2-elf-nm -n mem_test.elf > mem_init/hdl_sim/mysystem_ram.sym
+Post-processing to create mem_init/hdl_sim/sdram.sym...
+nios2-elf-nm -n mem_test.elf > mem_init/hdl_sim/sdram.sym
+Post-processing to create mem_init/meminit.spd...
+Post-processing to create mem_init/meminit.qip...
+
+**** Build Finished ****

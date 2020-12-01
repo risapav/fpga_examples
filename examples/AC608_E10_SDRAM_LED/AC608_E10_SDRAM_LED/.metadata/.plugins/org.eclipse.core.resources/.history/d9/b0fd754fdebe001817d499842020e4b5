@@ -1,0 +1,94 @@
+#include "lcd.h"
+#include <stdio.h>
+//#include "001.h"
+//#include "002.h"
+//#include "003.h"
+
+
+int main()
+{
+	printf("Hello from Nios II!\n");
+
+	uint8_t x=0;
+
+	IOWR_ALTERA_AVALON_PIO_DATA(LCD_BL_BASE, 0);//点亮背光
+ 	LCD_Init();
+	POINT_COLOR=RED;
+
+//	LCD_Clear(RED);
+//
+//	int i;
+//	while(1)
+//	{
+//		if(i==16)
+//			i>=0;
+//		else
+//			i++;
+//		LCD_Clear(1<<i);
+//		usleep(300000);
+//
+//
+//	}
+
+
+
+
+	uint32_t index = 0;
+
+
+	int i;
+	for(i=0;i<120;i++)
+	{
+		LCD_SetCursor(x, 0); //设置光标位置
+		LCD_WriteRAM_Prepare(); //开始写入GRAM
+		LCD_WR_DATA(1);
+		LCD_WR_DATA(2);
+		LCD_WR_DATA(4);
+		LCD_WR_DATA(8);
+		LCD_WR_DATA(16);
+		LCD_WR_DATA(32);
+		LCD_WR_DATA(64);
+		LCD_WR_DATA(128);
+		LCD_WR_DATA(256);
+		LCD_WR_DATA(512);
+		LCD_WR_DATA(1024);
+		LCD_WR_DATA(2048);
+		LCD_WR_DATA(4096);
+		LCD_WR_DATA(8192);
+		LCD_WR_DATA(16384);
+		LCD_WR_DATA(32768);
+	}
+
+
+	while(1);
+
+
+//  	while(1)
+//	{
+//		switch(x)
+//		{
+//			case 0:LCD_ShowPic(gImage_001);;break;
+//			case 1:LCD_ShowPic(gImage_002);;break;
+//			case 2:LCD_ShowPic(gImage_003);;break;
+//			case 3:LCD_Clear(RED);break;
+//			case 4:LCD_Clear(BLUE);break;
+//			case 5:LCD_Clear(GREEN);break;
+//			case 6:LCD_Clear(CYAN);break;
+//
+//			case 7:LCD_Clear(YELLOW);break;
+//			case 8:LCD_Clear(BRRED);break;
+//			case 9:LCD_Clear(GRAY);break;
+//			case 10:LCD_Clear(LGRAY);break;
+//			case 11:LCD_Clear(BROWN);break;
+//		}
+//		POINT_COLOR=RED;
+//		LCD_ShowString(30,50,"AC6102");
+//		LCD_ShowString(30,70,"NIOS II CPU Based");
+//		LCD_ShowString(30,90,"xiaomeige");
+//		LCD_ShowString(30,110,"2016/11/14");
+//	    x++;
+//		if(x==12)x=0;
+//		//LED0=!LED0;
+//		usleep(1000000);
+//	}
+}
