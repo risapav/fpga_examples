@@ -64,8 +64,6 @@ module App (
 	//---------------------
 	// hdmi interface
 	//---------------------
-
-
 	hdmi #(
 		.DVI_OUTPUT(0),
 		.VIDEO_ID_CODE(1), 
@@ -82,8 +80,6 @@ module App (
 		.audio_data, // vstup pre audio data
 
 		// These outputs go to your HDMI port
-//		.tmds_p,
-//		.tmds_n,
 		.o_tmds,
 
 		// All outputs below this line stay inside the FPGA
@@ -113,7 +109,6 @@ module App (
 	logic	ack;
 	logic	valid;
 	logic	[DATA_WIDTH-1:0]q;
-	
 	
 	sdram 
 	#(
