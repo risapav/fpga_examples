@@ -1,6 +1,140 @@
 //App app(.pixel_clk(clk_25), .pixel_clk10(clk_250), .clk(clk_32));
 //store it in an array bit[7:0] img[3][640][480] ; 3 is for R,G,B values , 640 and 480 is to match the pixel size.
 
+module Video_timing
+#(
+	// These settings are for 720p, assuming clk is running at 74.25 MHz
+	parameter VIDEO_H_SYNC_PIXELS =  16'd40,
+	parameter VIDEO_H_BP_PIXELS   =  16'd220,
+	parameter VIDEO_H_ACTIVE_PIXELS =16'd1280,
+	parameter VIDEO_H_FP_PIXELS   =  16'd110,
+	parameter VIDEO_H_SYNC_ACTIVE =  1'b1,
+	parameter VIDEO_V_SYNC_LINES  =  16'd5,
+	parameter VIDEO_V_BP_LINES    =  16'd20,
+	parameter VIDEO_V_ACTIVE_LINES = 16'd720,
+	parameter VIDEO_V_FP_LINES   =   16'd5,
+	parameter VIDEO_V_SYNC_ACTIVE =  1'b1
+)
+(
+	input wire reset,
+	input wire clk,
+
+	output logic [9:0] x,
+	output logic [9:0] y,
+
+	output reg hsync,
+	output reg vsync,
+	output reg active
+);
+
+    // State constants for our two timing state machines (one horizontal, one vertical)
+    enum { VIDEO_SYNC,  VIDEO_BACKPORCH , VIDEO_ACTIVE , VIDEO_FRONTPORCH } state_h, state_v;
+	 	 
+	 logic [15:0] count_h; // 1-based so we will stop when count_h is the total pixels for the current state
+	 logic [15:0] count_v; // 1-based so we will stop when count_v is the total lines for the current state
+	 
+	 logic inc_v = 1'b0;
+	 
+	
+   // Change outputs on clock.
+    // (These update one clock step behind everything else below, but that's
+    //  okay because the lengths of all the periods are still correct.)
+    always_ff @(posedge clk) begin
+        if (reset == 1'b1) begin
+            hsync  <= ~VIDEO_H_SYNC_ACTIVE;
+            vsync  <= ~VIDEO_V_SYNC_ACTIVE;
+            active <= 1'b0;
+            x      <= 16'd0;
+            y      <= 16'd0;
+        end else begin
+            hsync  <= (state_h == VIDEO_SYNC) ^ (~VIDEO_H_SYNC_ACTIVE);
+            vsync  <= (state_v == VIDEO_SYNC) ^ (~VIDEO_V_SYNC_ACTIVE);
+            active <= (state_h == VIDEO_ACTIVE) && (state_v == VIDEO_ACTIVE);
+            x      <= count_h - 1;
+            y      <= count_v - 1;
+         end
+    end
+
+    // Horizontal state machine
+    always_ff @(posedge clk) begin
+        if (reset == 1'b1) begin
+            count_h <= 16'b1;
+            state_h <= VIDEO_FRONTPORCH;
+        end else begin
+            inc_v <= 0;
+            count_h <= count_h + 16'd1;
+
+            case (state_h)
+                VIDEO_SYNC: begin
+                    if (count_h == VIDEO_H_SYNC_PIXELS) begin
+                        state_h <= VIDEO_BACKPORCH;
+                        count_h <= 16'b1;
+                    end
+                end
+                VIDEO_BACKPORCH: begin
+                    if (count_h == VIDEO_H_BP_PIXELS) begin
+                        state_h <= VIDEO_ACTIVE;
+                        count_h <= 16'b1;
+                    end
+                end
+                VIDEO_ACTIVE: begin
+                    if (count_h == VIDEO_H_ACTIVE_PIXELS) begin
+                        state_h <= VIDEO_FRONTPORCH;
+                        count_h <= 16'b1;
+                    end
+                end
+                VIDEO_FRONTPORCH: begin
+                    if (count_h == VIDEO_H_FP_PIXELS) begin
+                        state_h <= VIDEO_SYNC;
+                        count_h <= 16'b1;
+                        inc_v <= 1;
+                    end
+                end
+            endcase
+        end
+    end
+
+    // Vertical state machine
+    always_ff @(posedge clk) begin
+        if (reset == 1'b1) begin
+            count_v <= 16'b1;
+            state_v <= VIDEO_FRONTPORCH;
+        end else begin
+            if (inc_v) begin
+                count_v <= count_v + 16'd1;
+                case (state_v)
+                    VIDEO_SYNC: begin
+                        if (count_v == VIDEO_V_SYNC_LINES) begin
+                            state_v <= VIDEO_BACKPORCH;
+                            count_v <= 16'b1;
+                        end
+                    end
+                    VIDEO_BACKPORCH: begin
+                        if (count_v == VIDEO_V_BP_LINES) begin
+                            state_v <= VIDEO_ACTIVE;
+                            count_v <= 16'b1;
+                        end
+                    end
+                    VIDEO_ACTIVE: begin
+                        if (count_v == VIDEO_V_ACTIVE_LINES) begin
+                            state_v <= VIDEO_FRONTPORCH;
+                            count_v <= 16'b1;
+                        end
+                    end
+                    VIDEO_FRONTPORCH: begin
+                        if (count_v == VIDEO_V_FP_LINES) begin
+                            state_v <= VIDEO_SYNC;
+                            count_v <= 16'b1;
+                        end
+                    end
+                endcase
+            end
+        end
+    end	
+	 
+	 
+endmodule
+
 module App (
 	input logic rst_in,
 	input logic clk_50, 
@@ -25,6 +159,24 @@ module App (
 	);
 
 
+	//video timing
+	logic hsync, vsync, active;
+	logic [9:0] x,y;
+	
+	Video_timing video_timing(
+	
+		.reset(rst_in),
+		.clk(clk_pixel),
+
+		.x(x),
+		.y(y),
+
+		.hsync(hsync),
+		.vsync(vsync),
+		.active(active)
+	
+	);
+	
 	// picture 
 	logic [9:0] cx, cy, screen_start_x, screen_start_y, frame_width, frame_height, screen_width, screen_height;
 	// video data
