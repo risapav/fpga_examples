@@ -28,8 +28,8 @@ module top
 	output         sdram_ras_n, // .ras_n
 	output         sdram_we_n,  // .we_n
 	output   [0:4] led,
-	
-	
+	// signalizacne LED
+//	output   [0:11] sig,
 	// user interface
 	input		[0:2]	button,
 
@@ -89,10 +89,11 @@ module top
 	PushButton_Debouncer button_key(
 		.clk,
 		.PB(button[1]),
-		.PB_down(key)
+		.PB_state(key)
 	);
 	
-	assign led[3] = reset;
+	assign led[0] = reset;
+	assign led[2] = key;
 	//end of reset
 	
 	//frequency generator
@@ -115,7 +116,7 @@ module top
 	) 
 	blinky(
 		.sig_in(clk_pixel_x10),
-		.sig_out(led[0])
+		.sig_out(led[1])
 	);
 	//end of test clock
 
@@ -142,7 +143,9 @@ module top
 		.o_tmds, 
 		// user interface
 		.key, 
-		.led({led[1], led[2]})
+		.led(led[3])
+//		,
+//		.sig
 		);
 		
 	//hdmi output 
