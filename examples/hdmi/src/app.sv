@@ -27,34 +27,95 @@ module App (
 	);
 	localparam BIT_WIDTH = 10;
 	
-	// picture 
-	logic [BIT_WIDTH-1:0] cx, cy;
+	// visible screen coordinate
+	logic [BIT_WIDTH-1:0] cx='0, cy='0, bx='0, by='0;
 	// vstup pre video data
-	logic [23:0] rgb = 24'h0; 
+	logic [15:0] rgb, brgb; 
 	logic [11:0] aux = 12'h0;
 	//video timing
-	logic vde, ade;	
+	logic vde, ade;
+
+	logic max_bx = '0, max_by = '0;
+	always_comb begin
+		max_bx = (bx == 640);
+		max_by = (by == 480);
+	end
 //
+	always_ff @(posedge clk_50) begin
+		if(max_bx) begin
+			bx <= '0;
+			if(max_by) 
+				by <= '0;
+			else
+				by ++;			
+		end
+		else begin
+			bx++;				
+		end
+	end
+//	
+	logic video = '0;
+	Rgb 
+	#(
+		.BIT_WIDTH(BIT_WIDTH)
+	)
+	rgb_gen(
+		.rst_n(!rst_in),
+		.clk(clk_50),
+		//button to change generated picture
+		.key, 
+		// xy position inside visible frame
+		.i_vde('1),
+		.o_vde(video),
+		.i_cx(bx), 
+		.i_cy(by), 
+		.o_rgb(brgb)	// vystup pre video data
+	);		
+//
+	logic [23:0] crgb = '0;
+	
+	always_comb begin
+		crgb[23:16] = rgb[15:11] * 8; 
+		crgb[15:8] = rgb[10:5] * 4;
+		crgb[7:0] =  rgb[4:0] * 8;
+	end
+	
 	Hdmi #(
 		.GENERATED_CLOCK(1'b1),
 		.BIT_WIDTH(BIT_WIDTH),
-		.DVI_OUTPUT(1'b1)
+		.DVI_OUTPUT('1)
 	)hdmi (
 		.rst_n(!rst_in),
 		.clk_pixel,
 		.clk_pixel_x10,
-		// xy position inside visible frame
-		.o_c({cx, cy}), 
-		.o_vde(vde),
-		.o_ade(ade),
 		// vstup pre video data
-		.i_rgb(rgb),
+		.i_rgb(crgb),
+		// xy position inside visible frame
+		.o_cur({cx,cy}), 
+		.o_vde(vde),
 		// vstup pre aux/audio data
-		.i_aux(aux),
+		.i_aux(aux),			
+		.o_ade(ade),
 		// These outputs go to your HDMI port
 		.o_tmds
 	);
-	
+//
+
+// dualport async ram
+	dual_port_ram #(
+		.DATA_WIDTH(16),
+		.ADDR_WIDTH(2*BIT_WIDTH)
+	) dp_ram
+	(
+		.wr_clk_i(clk_50),
+		.wr_addr_i({bx,by}),
+		.wr_data_i(brgb),
+		.wr_i(video),
+		.rd_clk_i(clk_pixel),
+		.rd_addr_i({cx,cy}),
+		.rd_data_o(rgb),
+		.rd_i(vde)			
+	);
 
 //	always @(posedge clk_audio)
 //		audio_data <= '{audio_data[0] + 16'sd1, audio_data[1] - 16'sd1};
@@ -79,21 +140,6 @@ module App (
 //		.audio_data
 //	);
 
-	Rgb 
-	#(
-		.BIT_WIDTH(BIT_WIDTH)
-	)
-	rgb_gen(
-		.rst_n(!rst_in),
-		.clk(clk_pixel),
-		//button to change generated picture
-		.key, 
-		// xy position inside visible frame
-		.i_vde(vde),
-		.i_cx(cx), 
-		.i_cy(cy), 
-		.o_rgb(rgb)	// vystup pre video data
-	);	
 
 	//---------------------
 	// sdram

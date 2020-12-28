@@ -223,6 +223,12 @@ set_global_assignment -name EDA_TEST_BENCH_NAME vga_timing_tb -section_id eda_si
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id vga_timing_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME vga_timing_tb -section_id vga_timing_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE ../../fpga_lib/lib/hdmi/vga_timing.sv -section_id vga_timing_tb
+# Obsolete assignment in <Version 20.1> "set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top"
+
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/hdmi/hdmi_stuff.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/hdmi/hdmi.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/debouncer.sv
 set_global_assignment -name VHDL_FILE ../../fpga_lib/lib/sdram/sdram.vhd
@@ -234,9 +240,5 @@ set_global_assignment -name VERILOG_FILE ../../fpga_lib/lib/divider.v
 set_global_assignment -name QIP_FILE src/pll.qip
 set_global_assignment -name SYSTEMVERILOG_FILE src/app.sv
 set_global_assignment -name SYSTEMVERILOG_FILE top.sv
-# Obsolete assignment in <Version 20.1> "set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top"
-
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name SYSTEMVERILOG_FILE ../../fpga_lib/lib/buffer/dp_ram.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
